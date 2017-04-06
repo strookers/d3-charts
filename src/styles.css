@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+.dropdownLink{
+    display: block;
+    padding: 15px;
+    color: #777;
+    text-decoration: none;
+}
+
+.dropdownLink:hover {
+    text-decoration: none;
+    color: #333;
+    background-color: transparent;
+}

@@ -1,3 +1,40 @@
-<h1>
-  {{title}}
-</h1>
+<nav class="navbar navbar-default">
+  <div class="container">
+
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+      <a class="navbar-brand" [routerLink]=" ['home'] ">
+        <p>D3 CHARTS</p>
+      </a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li router-active>
+          <a [routerLink]=" ['home'] ">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li router-active>
+          <a [routerLink]=" ['about'] ">About<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="dropdown">
+        <span dropdown (isOpenChange)="toggled($event)">
+        <a href dropdownToggle (click)="false" class="dropdownLink">Charts<span class="sr-only">(current)</span></a>
+            <ul *dropdownMenu class="dropdown-menu">
+                <li>
+                    <a [routerLink]=" ['bar-chart'] ">Bar chart</a>
+                    <a [routerLink]=" ['area-chart'] ">Area chart</a>
+                    <a [routerLink]=" ['line-chart'] ">Line chart</a>
+                </li>
+            </ul>
+        </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<router-outlet></router-outlet>
