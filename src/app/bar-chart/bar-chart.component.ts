@@ -8,43 +8,68 @@ import * as d3 from 'd3/index';
 })
 export class BarChartComponent implements OnInit {
 
-  dataset: number[] = [5, 10, 13, 19, 21, 25, 22, 18, 15, 13, 11, 12, 15, 20, 18, 17, 16, 18, 23, 25];
+  barData : dataItem[] = [{x: 1, y: 5}, {x: 20, y: 20}, {x: 40, y: 10}, {x: 60, y: 40}, {x: 80, y: 5}, {x: 100, y: 60}];
 
   constructor() { }
 
   ngOnInit() {
-    this.updateChart();
+    this.initChart();
   }
 
-  updateChart() {
-    var svgWidth : number = 500;
-    var svgHeight : number = 100;
-    var barPadding : number = 1;
+  initChart() {
+    var barData = this.barData;
+    var svgWidth : number = 1000;
+    var svgHeight : number = 500;
+    var margin = {top: 20, right: 20, bottom: 20, left: 50}
 
-    var svg = d3.select("#chart")
-      .append("svg")
-      .attr("width", svgWidth)
-      .attr("height", svgHeight);
+    var svg = d3.select('#bar-chart').append('svg')
+      .attr('width', svgWidth)
+      .attr('height', svgHeight);
 
-    var rects = svg.selectAll("rect")
-      .data(this.dataset)
+    var xRange = d3.scaleLinear()
+    .range([margin.left, svgWidth - margin.right])
+    .domain([d3.min(barData, d => d.x),d3.max(barData, d => d.x)]);
+
+    var yRange = d3.scaleLinear()
+    .range([svgHeight - margin.top, margin.bottom])
+    .domain([0, d3.max(barData, d => d.y)]);
+
+    var xAxis = d3.axisBottom(xRange)
+      .tickSize(5);
+
+    var yAxis = d3.axisLeft(yRange)
+      .tickSize(5);
+
+    svg.append('svg:g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,' + (svgHeight - margin.bottom) + ')')
+      .call(xAxis);
+
+    svg.append('svg:g')
+      .attr('class', 'y axis')
+      .attr('transform', 'translate(' + (margin.left) + ',0)')
+      .call(yAxis);
+
+    xRange = d3.scaleBand()
+      .rangeRound([margin.left, svgWidth - margin.right])
+      .padding(0.1)
+      .domain(barData.map(d => d.x));
+
+    svg.selectAll('rect')
+      .data(barData)
       .enter()
-      .append("rect")
-      .attr("x", (d, i) => i * (svgWidth / this.dataset.length))
-      .attr("y", d => svgHeight - d * 4)
-      .attr("width", svgWidth / this.dataset.length - barPadding)
-      .attr("height", d => d * 4)
-      .attr('fill', d => "rgb(0, 0, " + (d * 10) + ")" );
+      .append('rect')
+      .attr('x', d => xRange(d.x) )
+      .attr('y', d => yRange(d.y) )
+      .attr('width', xRange.bandwidth()) // sets the width of bar
+      .attr('height', d => (svgHeight - margin.bottom) - yRange(d.y))
+      .attr('fill', 'grey');   // fills the bar with grey color
 
-    var labels = svg.selectAll("text")
-      .data(this.dataset)
-      .enter()
-      .append("text")
-      .text(d => d)
-      .attr('x', (d, i) => i * (svgWidth / this.dataset.length) + 5)
-      .attr('y', d => svgHeight - (d * 4) + 15)
-      .attr("font-family", "sans-serif")
-      .attr("font-size", "11px")
-      .attr("fill", "white");
   }
+}
+
+interface dataItem
+{
+  x : number;
+  y : number;
 }
