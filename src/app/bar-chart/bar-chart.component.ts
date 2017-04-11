@@ -24,7 +24,9 @@ export class BarChartComponent implements OnInit {
 
     var svg = d3.select('#bar-chart').append('svg')
       .attr('width', svgWidth)
-      .attr('height', svgHeight);
+      .attr('height', svgHeight)
+      .attr('viewbox', '0 0 '+ svgWidth + ' ' + svgHeight)
+      .attr('preserveAspectRatio', 'xMinYMid');
 
     var xRange = d3.scaleLinear()
     .range([margin.left, svgWidth - margin.right])
